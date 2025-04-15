@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Kamlesh Verma - Resume</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+      color: #333;
+      line-height: 1.5;
+    }
+    .container {
+      max-width: 800px; /* Slightly narrower for better A4 fit */
+      margin: 30px auto;
+      padding: 40px; /* More padding */
+      background-color: white;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      border-radius: 8px;
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 8px; /* Increased padding */
+      margin-top: 25px; /* Spacing */
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      border-bottom: none; /* Remove border for main title */
+    }
+    .section {
+      margin-bottom: 25px; /* Increased spacing */
+      page-break-inside: avoid; /* Try to avoid breaking sections across pages */
+    }
+    .contact {
+      text-align: center;
+      font-size: 1em; /* Slightly larger contact info */
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+    .personal {
+      font-size: 0.95em;
+      margin-top: 5px;
+      list-style: none; /* Remove bullets for personal details */
+      padding-left: 0;
+    }
+    .personal li {
+      margin-bottom: 8px; /* Spacing for personal details */
+    }
+    ul {
+      padding-left: 25px; /* Slightly more indent */
+      list-style: disc;
+    }
+    li {
+      margin-bottom: 8px; /* Increased spacing */
+      line-height: 1.5;
+    }
+    .title {
+      font-weight: bold;
+      color: #34495e; /* Slightly different color for titles */
+    }
+    .subheading {
+      font-weight: bold;
+      margin-top: 15px; /* Increased spacing */
+      color: #34495e;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 50px; /* Increased spacing */
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+      font-size: 0.9em;
+      color: #777;
+    }
+    .download-btn {
+      background: #3498db; /* Brighter color */
+      color: #fff;
+      border: none;
+      padding: 12px 20px; /* Larger button */
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+      float: right;
+      margin-bottom: 20px;
+      transition: background-color 0.3s ease;
+    }
+    .download-btn:hover {
+      background: #2980b9; /* Darker hover */
+    }
+    /* Clear float for elements after button */
+    h1 {
+      clear: both;
+    }
+
+    /* Loading spinner */
+    .spinner {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60px;
+      height: 60px;
+      border: 6px solid rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      border-top-color: #3498db;
+      animation: spin 1s ease-in-out infinite;
+      z-index: 1000;
+    }
+    
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.85);
+      z-index: 999;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Styles specific to PDF generation */
+    @media print {
+      body {
+        background-color: #fff;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        width: 100%;
+        box-shadow: none;
+        margin: 0;
+        max-width: 100%;
+        border-radius: 0;
+        padding: 20px; /* Adjust padding for print */
+      }
+      .download-btn {
+        display: none; /* Hide button in print/PDF */
+      }
+      .footer {
+        border-top: none; /* Remove border in PDF if using JS footer */
+      }
+      /* Better spacing for print */
+      h2 {
+        margin-top: 20px;
+        page-break-after: avoid;
+      }
+      h1 {
+        page-break-after: avoid;
+      }
+      li {
+        page-break-inside: avoid;
+      }
+    }
+    
+    /* Explicit page break controls */
+    .page-break {
+      page-break-after: always;
+    }
+    
+    /* Better PDF formatting for sections */
+    .pdf-section {
+      break-inside: avoid;
+    }
+    
+    /* Status message */
+    .status-message {
+      display: none;
+      position: fixed;
+      top: 60%;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #3498db;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-weight: bold;
+      z-index: 1001;
+    }
+  </style>
+  <!-- Use html2pdf bundle with latest version -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+  <div id="loading-overlay" class="overlay"></div>
+  <div id="loading-spinner" class="spinner"></div>
+  <div id="status-message" class="status-message">Generating PDF...</div>
+
+  <div class="container" id="resume-content">
+    <!-- Download button moved inside container but floated right -->
+    <button class="download-btn" onclick="downloadResume()">Download Resume (PDF)</button>
+
+    <h1>Kamlesh Verma</h1>
+    <p class="contact">
+      <strong>Email:</strong> kamleshverma9827@gmail.com &nbsp; | &nbsp;
+      <strong>Mobile:</strong> 09827459176
+    </p>
+
+    <div class="section pdf-section">
+      <h2>Objective</h2>
+      <p>A challenging career that would provide me with enriching learning experiences and in return would give me an opportunity to contribute to the growth of the organization.</p>
+    </div>
+
+    <div class="section pdf-section">
+      <h2>Professional Qualifications</h2>
+      <ul>
+        <li>MBA in Marketing & Retail, Sri Satya Sai Institute of Management, Sehore, 62% (2008)</li>
+      </ul>
+    </div>
+
+    <div class="section pdf-section">
+      <h2>Academic Qualifications</h2>
+      <ul>
+        <li>B.Ed, Savior B.Ed College, Bhopal, 62% (2006)</li>
+        <li>M.A. (History), Govt. P.G. College, Sehore, 62% (2005)</li>
+        <li>B.Sc (Biology), Govt. P.G. College, Sehore, 56% (2003)</li>
+        <li>HSC, Govt. H.S. School No. 1, Sehore, 66% (2000)</li>
+        <li>SSC, Radha Krishna Modi School, Sehore, 60% (1998)</li>
+      </ul>
+    </div>
+
+    <div class="section pdf-section">
+      <h2>Work Experience</h2>
+      <ul>
+        <li><span class="title">Asst. Professor (Dept. of Management), NSS Program Officer</span>, Radharaman Institute of Technology and Science (Jul 2009 - Jul 2014)</li>
+        <li><span class="title">Asst. Professor & H.O.D. of Management</span>, Swami Vivekanand College of Science & Technology, Bhopal (Apr 2016 - May 2017)</li>
+        <li><span class="title">Asst. Professor & H.O.D. of Management</span>, RITS (May 2017 - May 2019)</li>
+        <li><span class="title">Asst. Professor & Senior Counselor</span>, Sagar Institute of Research and Technology, Bhopal (May 2019 - Present)</li>
+        <li><span class="title">Marketing Consultant</span>, Max New York Life Insurance (Jan 2007 - Jun 2009)</li>
+      </ul>
+    </div>
+
+    <div class="section pdf-section">
+      <h2>Other Activities</h2>
+      <ul>
+        <li>Examination & Counseling Coordinator at RGI</li>
+      </ul>
+    </div>
+
+    <div class="section pdf-section">
+      <h2>Paper Publication</h2>
+      <ul>
+        <li>"Role of management education in the rural areas of INDIA" - International Seminar, Bansal MBA College, Bhopal (Feb 19-20, 2010)</li>
+      </ul>
+    </div>
+
+    <div class="section pdf-section">
+      <h2>Computer Exposure</h2>
+      <ul>
+        <li>Post Graduate Diploma in Computer Application (PGDCA)</li>
+        <li>Internet Savvy</li>
+      </ul>
+    </div>
+
+    <div class="section pdf-section">
+      <h2>Skills Summary</h2>
+      <ul>
+        <li>Team coordination and effectiveness</li>
+        <li>Fast learner and adaptable</li>
+        <li>Quick grasp of new ideas and concepts</li>
+        <li>Proactive attitude towards work</li>
+      </ul>
+    </div>
+
+    <div class="section pdf-section">
+      <h2>Projects</h2>
+      <div class="subheading">Project A:</div>
+      <ul>
+        <li><strong>Title:</strong> Market share analysis of HCL Info System</li>
+        <li><strong>Objective:</strong> To analyze the market share of HCL Info System</li>
+      </ul>
+      <div class="subheading">Project B:</div>
+      <ul>
+        <li><strong>Title:</strong> Marketing potentials for specific commodity and derivatives</li>
+        <li><strong>Objective:</strong> To find out market share and its potential for commodities and derivatives</li>
+      </ul>
+    </div>
+
+    <div class="section pdf-section">
+      <h2>Personal Details</h2>
+      <ul class="personal">
+        <li><strong>Date of Birth:</strong> Jan 18th, 1982</li>
+        <li><strong>Marital Status:</strong> Married</li>
+        <li><strong>Father's Name:</strong> Mr. Ramcharan Verma</li>
+        <li><strong>Languages:</strong> English & Hindi</li>
+        <li><strong>Permanent Address:</strong> Village Bhilkhedi (Sadak), Post Lasudia (Khas), Ashta, Dist-Sehore, MP – 466114</li>
+        <li><strong>Current Address:</strong> H.No. 69, Bitthal Nagar, Lalghati, Bhopal 462032, MP</li>
+        <li><strong>Interests:</strong> Reading Newspaper</li>
+      </ul>
+    </div>
+
+    <div class="section pdf-section">
+      <h2>References</h2>
+      <ul>
+        <li><strong>Mr. S.N Sonania</strong><br>Asstt. Director, Agriculture Department, Bhopal (MP)<br>Contact No: 09425647425</li>
+        <li><strong>Mr. Shirish Pandey</strong><br>Senior Executive, Godrej & Boyce Mfg. Co. Ltd., Locks Division Bhopal<br>Contact No: 09826036444</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    function showLoadingSpinner() {
+      document.getElementById('loading-overlay').style.display = 'block';
+      document.getElementById('loading-spinner').style.display = 'block';
+      document.getElementById('status-message').style.display = 'block';
+    }
+    
+    function hideLoadingSpinner() {
+      document.getElementById('loading-overlay').style.display = 'none';
+      document.getElementById('loading-spinner').style.display = 'none';
+      document.getElementById('status-message').style.display = 'none';
+    }
+    
+    function downloadResume() {
+      // Show loading spinner
+      showLoadingSpinner();
+      
+      // Get elements
+      const btn = document.querySelector('.download-btn');
+      const element = document.getElementById('resume-content');
+      
+      // Hide download button during PDF generation
+      btn.style.display = 'none';
+      
+      // Set status message
+      document.getElementById('status-message').textContent = 'Preparing resume...';
+      
+      // Create a deep clone of the element to modify it for PDF generation
+      const pdfElement = element.cloneNode(true);
+      
+      // Remove the download button from the cloned element
+      const btnClone = pdfElement.querySelector('.download-btn');
+      if (btnClone) {
+        btnClone.remove();
+      }
+      
+      // Update status
+      setTimeout(() => {
+        document.getElementById('status-message').textContent = 'Generating PDF...';
+      }, 500);
+      
+      // Optimize PDF generation options
+      const opt = {
+        margin: [10, 10, 10, 10], // Top, right, bottom, left margins in mm
+        filename: 'Kamlesh_Verma_Resume.pdf',
+        image: { 
+          type: 'jpeg', 
+          quality: 1.0 // Maximum image quality
+        },
+        html2canvas: { 
+          scale: 2, // Higher scale for better quality
+          useCORS: true,
+          letterRendering: true,
+          logging: false,
+          dpi: 300 // Higher DPI for better print quality
+        },
+        jsPDF: { 
+          unit: 'mm',
+          format: 'a4',
+          orientation: 'portrait',
+          putOnlyUsedFonts: true,
+          floatPrecision: 16 // For better text positioning
+        },
+        pagebreak: { 
+          mode: ['avoid-all', 'css', 'legacy'],
+          before: '.page-break',
+          avoid: ['.pdf-section', 'h2', 'h3']
+        }
+      };
+
+      // Create PDF with custom rendering and handling
+      html2pdf()
+        .from(pdfElement)
+        .set(opt)
+        .toPdf()
+        .get('pdf')
+        .then(pdf => {
+          // Update status
+          document.getElementById('status-message').textContent = 'Adding headers and footers...';
+          
+          const totalPages = pdf.internal.getNumberOfPages();
+          
+          // For each page, add header and footer
+          for (let i = 1; i <= totalPages; i++) {
+            pdf.setPage(i);
+            
+            // Common font settings for headers/footers
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+            
+            // Header (only for pages after the first)
+            if (i > 1) {
+              // Set styles for header
+              pdf.setFont("Helvetica", "bold");
+              pdf.setFontSize(11);
+              pdf.setTextColor(50, 50, 50);
+              
+              // Add header content
+              pdf.text("KAMLESH VERMA", 10, 8);
+              
+              // Contact info in header
+              pdf.setFont("Helvetica", "normal");
+              pdf.setFontSize(9);
+              const contactText = "E-mail: kamleshverma9827@gmail.com | Mob: 09827459176";
+              pdf.text(contactText, pageWidth - 10, 8, { align: 'right' });
+              
+              // Add separator line
+              pdf.setDrawColor(200, 200, 200);
+              pdf.setLineWidth(0.5);
+              pdf.line(10, 10, pageWidth - 10, 10);
+            }
+            
+            // Footer on every page - UPDATED FOOTER
+            // Set footer styles
+            pdf.setFont("Helvetica", "normal");
+            pdf.setFontSize(9);
+            pdf.setTextColor(100, 100, 100);
+            
+            // Calculate footer position - slightly higher up from bottom
+            const footerY = pageHeight - 10;
+            
+            // Add footer content - UPDATED
+            // Left side - add current date
+            const currentDate = new Date();
+            const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
+            const dateString = currentDate.toLocaleDateString('en-US', dateOptions);
+            // pdf.text("Generated: " + dateString, 10, footerY);
+            
+            // Center - address
+            pdf.text("H.No. 69, Bitthal Nagar, Lalghati, Bhopal 462032, MP", pageWidth/2, footerY, { align: 'center' });
+            
+            // Right side - page numbering
+            pdf.text(`Page ${i} of ${totalPages}`, pageWidth - 10, footerY, { align: 'right' });
+            
+            // Add separator line above footer
+            pdf.setDrawColor(120, 120, 120);
+            pdf.setLineWidth(0.75);
+            pdf.line(10, footerY - 3, pageWidth - 10, footerY - 3);
+          }
+          
+          // Update status message
+          document.getElementById('status-message').textContent = 'Finalizing PDF...';
+          
+          return pdf;
+        })
+        .save()
+        .then(() => {
+          // Update status message
+          document.getElementById('status-message').textContent = 'Download complete!';
+          
+          // Restore button and hide loading elements after a short delay
+          setTimeout(() => {
+            btn.style.display = 'block';
+            hideLoadingSpinner();
+          }, 1000);
+        })
+        .catch(error => {
+          console.error("PDF Generation Error:", error);
+          document.getElementById('status-message').textContent = 'Error generating PDF';
+          
+          // Restore button even on error
+          setTimeout(() => {
+            btn.style.display = 'block';
+            hideLoadingSpinner();
+          }, 1000);
+          
+          // Show error to user
+          alert("There was an error generating the PDF. Please try again.");
+        });
+    }
+  </script>
+</body>
+</html>
