@@ -431,7 +431,7 @@
             const currentDate = new Date();
             const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
             const dateString = currentDate.toLocaleDateString('en-US', dateOptions);
-            // pdf.text("Generated: " + dateString, 10, footerY);
+            pdf.text("Generated: " + dateString, 10, footerY);
             
             // Center - address
             pdf.text("H.No. 69, Bitthal Nagar, Lalghati, Bhopal 462032, MP", pageWidth/2, footerY, { align: 'center' });
